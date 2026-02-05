@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<title>Will you be my Valentine? 💕</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Nunito', sans-serif;
+  background: #fff0f3;
+  overflow: hidden;
+}
+
+/* Floating hearts */
+.hearts-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.heart {
+  position: absolute;
+  bottom: -40px;
+  font-size: 1.6rem;
+  animation: floatUp linear infinite;
+  opacity: 0.5;
+}
+@keyframes floatUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-120vh); }
+}
+
+/* Card */
+.card {
+  position: relative;
+  z-index: 1;
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 12px 48px rgba(200,60,80,.18);
+  padding: 48px 36px 40px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+}
+
+/* Bear */
+.bear {
+  font-size: 4.5rem;
+  margin-bottom: 16px;
+}
+
+/* Poem */
+.poem {
+  font-family: 'Playfair Display', serif;
+  color: #c9375d;
+  font-size: 1.7rem;
+  line-height: 1.35;
+  margin-bottom: 32px;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+button {
+  border: none;
+  border-radius: 50px;
+  padding: 14px 34px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.yes {
+  background: linear-gradient(135deg, #f06292, #ec407a);
+  color: white;
+}
+
+.no {
+  background: #f5e6ea;
+  color: #c9375d;
+}
+
+/* Celebration */
+.celebration {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+.celebration.show {
+  display: flex;
+}
+.celebration h2 {
+  font-family: 'Playfair Display', serif;
+  color: #c9375d;
+  font-size: 2.2rem;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hearts-bg" id="hearts"></div>
+
+<!-- Background music -->
+<audio id="bgMusic" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_4f3b0f5d27.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card" id="card">
+
+  <!-- Question / Poem -->
+  <div id="question">
+    <div class="bear">🧸</div>
+
+    <h1 class="poem">
+      Roses are red,<br>
+      Violets are blue,<br>
+      Every heartbeat I have<br>
+      Finds its rhythm in you.<br><br>
+      In your arms is my home,<br>
+      In your smile, my sign.<br>
+      Today and always,<br>
+      Will you be my Valentine? 💕
+    </h1>
+
+    <div class="buttons">
+      <button class="yes" id="yesBtn">Yes!</button>
+      <button class="no" id="noBtn">No</button>
+    </div>
+  </div>
+
+  <!-- Celebration -->
+  <div class="celebration" id="celebrate">
+    <div class="bear">🥰</div>
+    <h2>Yay! 💕</h2>
+    <p>I love you so, so much.</p>
+  </div>
+
+</div>
+
+<script>
+/* Background music - starts on first interaction */
+const music = document.getElementById("bgMusic");
+let musicStarted = false;
+
+function startMusic() {
+  if (!musicStarted) {
+    music.play().catch(e => console.log("Audio play failed:", e));
+    musicStarted = true;
+  }
+}
+
+// Start music on any interaction
+document.body.addEventListener('click', startMusic, { once: true });
+document.body.addEventListener('touchstart', startMusic, { once: true });
+
+/* Floating hearts */
+const hearts = document.getElementById("hearts");
+const emojis = ["💗","💖","💕","💝","🌸"];
+
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+  h.style.left = Math.random()*100 + "vw";
+  h.style.animationDuration = 6 + Math.random()*6 + "s";
+  hearts.appendChild(h);
+  h.addEventListener("animationend", () => h.remove());
+}, 700);
+
+/* Buttons */
+const yesBtn = document.getElementById("yesBtn");
+const noBtn  = document.getElementById("noBtn");
+const question = document.getElementById("question");
+const celebrate = document.getElementById("celebrate");
+
+yesBtn.onclick = () => {
+  question.style.display = "none";
+  celebrate.classList.add("show");
+};
+
+noBtn.onmouseenter = () => {
+  noBtn.style.transform = `translate(${Math.random()*120-60}px, ${Math.random()*80-40}px)`;
+};
+</script>
+
+</body>
+</html>
