@@ -126,7 +126,23 @@ button {
     opacity: 1;
     transform: scale(1);
   }
+.escape-zone {
+  position: relative;
+  width: 100%;
+  height: 90px;
+  margin-top: 16px;
 }
+
+.no {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translateX(-50%);
+  transition: left 0.2s ease, top 0.2s ease;
+}
+
+}
+
 
 </style>
 </head>
@@ -159,10 +175,14 @@ button {
       Will you be my Valentine? 💕
     </h1>
 
-    <div class="buttons">
-      <button class="yes" id="yesBtn">Yes!</button>
-      <button class="no" id="noBtn">No</button>
-    </div>
+   <div class="buttons">
+  <button class="yes" id="yesBtn">Yes!</button>
+</div>
+
+<div class="escape-zone" id="escapeZone">
+  <button class="no" id="noBtn">No</button>
+</div>
+
   </div>
 
   <!-- Celebration -->
@@ -228,10 +248,33 @@ yesBtn.onclick = () => {
   celebrate.classList.add("show");
 };
 
-noBtn.onmouseenter = () => {
-  noBtn.style.transform =
-    `translate(${Math.random()*120-60}px, ${Math.random()*80-40}px)`;
-};
+const escapeZone = document.getElementById("escapeZone");
+
+function moveNoButton() {
+  const zoneRect = escapeZone.getBoundingClientRect();
+  const btnRect  = noBtn.getBoundingClientRect();
+
+  const padding = 8;
+
+  const maxX = zoneRect.width  - btnRect.width  - padding * 2;
+  const maxY = zoneRect.height - btnRect.height - padding * 2;
+
+  const x = padding + Math.random() * Math.max(0, maxX);
+  const y = padding + Math.random() * Math.max(0, maxY);
+
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top  = `${y}px`;
+}
+
+// desktop hover
+noBtn.addEventListener("mouseenter", moveNoButton);
+
+// mobile tap
+noBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  moveNoButton();
+});
+
 </script>
 
 </body>
