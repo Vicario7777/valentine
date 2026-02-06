@@ -153,31 +153,34 @@ button {
 
 <script>
 /* Background music - starts on first interaction */
+<script>
 const music = document.getElementById("bgMusic");
 music.volume = 0;
 
-let musicStarted = false;
-
 function startMusic() {
-  if (musicStarted) return;
-  musicStarted = true;
+  document.removeEventListener("pointerdown", startMusic);
+  document.removeEventListener("touchstart", startMusic);
 
-  music.play().catch(() => {});
-  
-  let vol = 0;
-  const fade = setInterval(() => {
-    if (vol < 0.5) {
-      vol += 0.02;
-      music.volume = vol;
-    } else {
-      clearInterval(fade);
-    }
-  }, 100);
+  music.play().then(() => {
+    let v = 0;
+    const fade = setInterval(() => {
+      if (v < 0.5) {
+        v += 0.02;
+        music.volume = v;
+      } else {
+        clearInterval(fade);
+      }
+    }, 100);
+  }).catch(err => {
+    console.log("Music blocked:", err);
+  });
 }
 
-// Start music on any click or touch
-document.addEventListener('click', startMusic, { once: true });
-document.addEventListener('touchstart', startMusic, { once: true });
+// MUST be user interaction
+document.addEventListener("pointerdown", startMusic);
+document.addEventListener("touchstart", startMusic);
+</script>
+
 
 /* Floating hearts */
 const hearts = document.getElementById("hearts");
