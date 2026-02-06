@@ -81,6 +81,7 @@ button {
   font-size: 1.05rem;
   font-weight: 700;
   cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .yes {
@@ -111,20 +112,19 @@ button {
 </head>
 
 <body>
+
+<!-- Floating hearts -->
+<div class="hearts-bg" id="hearts"></div>
+
+<!-- Background music -->
 <audio id="bgMusic" preload="auto" loop>
   <source src="./music.mp3" type="audio/mpeg">
 </audio>
 
-<div class="hearts-bg" id="hearts"></div>
+<!-- Card -->
+<div class="card">
 
-<!-- Background music -->
-<audio id="bgMusic" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<div class="card" id="card">
-
-  <!-- Question / Poem -->
+  <!-- Poem & Question -->
   <div id="question">
     <div class="bear">🧸</div>
 
@@ -155,15 +155,25 @@ button {
 </div>
 
 <script>
-/* Background music - starts on first interaction */
-<script>
+/* Floating hearts */
+const hearts = document.getElementById("hearts");
+const emojis = ["💗","💖","💕","💝","🌸"];
+
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = 6 + Math.random() * 6 + "s";
+  hearts.appendChild(h);
+  h.addEventListener("animationend", () => h.remove());
+}, 700);
+
+/* Music */
 const music = document.getElementById("bgMusic");
 music.volume = 0;
 
-function startMusic() {
-  document.removeEventListener("pointerdown", startMusic);
-  document.removeEventListener("touchstart", startMusic);
-
+function playMusic() {
   music.play().then(() => {
     let v = 0;
     const fade = setInterval(() => {
@@ -174,30 +184,8 @@ function startMusic() {
         clearInterval(fade);
       }
     }, 100);
-  }).catch(err => {
-    console.log("Music blocked:", err);
-  });
+  }).catch(() => {});
 }
-
-// MUST be user interaction
-document.addEventListener("pointerdown", startMusic);
-document.addEventListener("touchstart", startMusic);
-</script>
-
-
-/* Floating hearts */
-const hearts = document.getElementById("hearts");
-const emojis = ["💗","💖","💕","💝","🌸"];
-
-setInterval(() => {
-  const h = document.createElement("div");
-  h.className = "heart";
-  h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-  h.style.left = Math.random()*100 + "vw";
-  h.style.animationDuration = 6 + Math.random()*6 + "s";
-  hearts.appendChild(h);
-  h.addEventListener("animationend", () => h.remove());
-}, 700);
 
 /* Buttons */
 const yesBtn = document.getElementById("yesBtn");
@@ -206,12 +194,14 @@ const question = document.getElementById("question");
 const celebrate = document.getElementById("celebrate");
 
 yesBtn.onclick = () => {
+  playMusic();               // 🎵 starts music (allowed by browser)
   question.style.display = "none";
   celebrate.classList.add("show");
 };
 
 noBtn.onmouseenter = () => {
-  noBtn.style.transform = `translate(${Math.random()*120-60}px, ${Math.random()*80-40}px)`;
+  noBtn.style.transform =
+    `translate(${Math.random()*120-60}px, ${Math.random()*80-40}px)`;
 };
 </script>
 
