@@ -108,6 +108,26 @@ button {
   color: #c9375d;
   font-size: 2.2rem;
 }
+  .couple-photo {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 30px rgba(200,60,80,.25);
+  animation: photoPop .5s ease;
+}
+
+@keyframes photoPop {
+  from {
+    opacity: 0;
+    transform: scale(.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 </style>
 </head>
 
@@ -147,15 +167,17 @@ button {
 
   <!-- Celebration -->
   <div class="celebration" id="celebrate">
-    <div class="bear">🥰</div>
-    <h2>You just made my heart melt 💖</h2>
-<p>
-Every laugh, every hug, every quiet moment<br>
-I’m so grateful I get to share them with you.<br>
-I love you more than words can say.
-</p>
 
-  </div>
+  <img src="./us.jpg" alt="Us together" class="couple-photo"/>
+
+  <h2>Varsha, you just made my heart do a little happy dance 💖</h2>
+  <p>
+    I was really hoping you’d say yes 😌<br>
+    Now I get to call you my Valentine —<br>
+    and honestly, my favourite person too.
+  </p>
+</div>
+
 
 </div>
 
