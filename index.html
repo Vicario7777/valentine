@@ -117,7 +117,7 @@ button {
 <div class="hearts-bg" id="hearts"></div>
 
 <!-- Background music -->
-<audio id="bgMusic" preload="auto" loop>
+<audio id="bgMusic" preload="auto" loop controls style="display:none">
   <source src="./music.mp3" type="audio/mpeg">
 </audio>
 
@@ -169,23 +169,25 @@ setInterval(() => {
   h.addEventListener("animationend", () => h.remove());
 }, 700);
 
-/* Music */
+/* Music — HARD GUARANTEE METHOD */
 const music = document.getElementById("bgMusic");
-music.volume = 0;
+music.volume = 0.5;
 
-function playMusic() {
+let unlocked = false;
+
+// Unlock audio on ANY interaction
+function unlockAudio() {
+  if (unlocked) return;
+  unlocked = true;
+
   music.play().then(() => {
-    let v = 0;
-    const fade = setInterval(() => {
-      if (v < 0.5) {
-        v += 0.02;
-        music.volume = v;
-      } else {
-        clearInterval(fade);
-      }
-    }, 100);
+    music.pause(); // prime it
+    music.currentTime = 0;
   }).catch(() => {});
 }
+
+document.addEventListener("pointerdown", unlockAudio, { once: true });
+document.addEventListener("touchstart", unlockAudio, { once: true });
 
 /* Buttons */
 const yesBtn = document.getElementById("yesBtn");
@@ -194,7 +196,7 @@ const question = document.getElementById("question");
 const celebrate = document.getElementById("celebrate");
 
 yesBtn.onclick = () => {
-  playMusic();               // 🎵 starts music (allowed by browser)
+  music.play().catch(() => {});
   question.style.display = "none";
   celebrate.classList.add("show");
 };
